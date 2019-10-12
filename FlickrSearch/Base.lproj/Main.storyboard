@@ -49,15 +49,21 @@
                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="a4q-S3-ver">
                                             <rect key="frame" x="0.0" y="0.0" width="200" height="200"/>
                                         </imageView>
+                                        <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="YoR-A2-eep">
+                                            <rect key="frame" x="81.5" y="81.5" width="37" height="37"/>
+                                        </activityIndicatorView>
                                     </subviews>
                                 </view>
                                 <constraints>
                                     <constraint firstItem="a4q-S3-ver" firstAttribute="leading" secondItem="1R1-DQ-C4U" secondAttribute="leading" id="0fd-Ps-ngh"/>
                                     <constraint firstAttribute="bottom" secondItem="a4q-S3-ver" secondAttribute="bottom" id="4O3-mC-twy"/>
+                                    <constraint firstItem="YoR-A2-eep" firstAttribute="centerX" secondItem="1R1-DQ-C4U" secondAttribute="centerX" id="Kht-6E-qIJ"/>
                                     <constraint firstItem="a4q-S3-ver" firstAttribute="top" secondItem="1R1-DQ-C4U" secondAttribute="top" id="Rjy-NH-kqP"/>
                                     <constraint firstAttribute="trailing" secondItem="a4q-S3-ver" secondAttribute="trailing" id="b6j-7e-9Tl"/>
+                                    <constraint firstItem="YoR-A2-eep" firstAttribute="centerY" secondItem="1R1-DQ-C4U" secondAttribute="centerY" id="nNL-Tx-gxC"/>
                                 </constraints>
                                 <connections>
+                                    <outlet property="activityIndicator" destination="YoR-A2-eep" id="yBb-0v-ABg"/>
                                     <outlet property="imageView" destination="a4q-S3-ver" id="iuP-Q7-7jq"/>
                                 </connections>
                             </collectionViewCell>

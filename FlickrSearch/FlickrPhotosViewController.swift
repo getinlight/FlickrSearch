@@ -78,11 +78,32 @@ extension FlickrPhotosViewController {
   override func collectionView(
     _ collectionView: UICollectionView,
     cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! FlickrPhotoCell
+    guard let cell = collectionView.dequeueReusableCell(
+      withReuseIdentifier: reuseIdentifier,
+      for: indexPath) as? FlickrPhotoCell else {
+      preconditionFailure("Invalid cell type")
+    }
+    
     let flickrPhoto = photo(for: indexPath)
-    cell.backgroundColor = .white
+    
+    cell.activityIndicator.stopAnimating()
+    
+    guard indexPath == largePhotoIndexPath else {
+      cell.imageView.image = flickrPhoto.thumbnail
+      return cell
+    }
+    
+    guard flickrPhoto.largeImage == nil else {
+      cell.imageView.image = flickrPhoto.largeImage
+      return cell
+    }
+    
     cell.imageView.image = flickrPhoto.thumbnail
+    
+    performLargeImageFetch(for: indexPath, flickrPhoto: flickrPhoto)
+    
     return cell
+    
   }
   
   override func collectionView(
@@ -126,6 +147,15 @@ extension FlickrPhotosViewController {
 // MARK: - Collection View Flow Layout Delegate
 extension FlickrPhotosViewController: UICollectionViewDelegateFlowLayout {
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    
+    if indexPath == largePhotoIndexPath {
+      let flickrPhoto = photo(for: indexPath)
+      var size = collectionView.bounds.size
+      size.height -= (sectionInsets.top + sectionInsets.bottom)
+      size.width -= (sectionInsets.left + sectionInsets.right)
+      return flickrPhoto.sizeToFillWidth(of: size)
+    }
+    
     let paddingSpace = sectionInsets.left * (itemsPerRow + 1)
     let availableWidth = view.frame.width - paddingSpace
     let widthPerItem = availableWidth / itemsPerRow
@@ -145,6 +175,29 @@ extension FlickrPhotosViewController: UICollectionViewDelegateFlowLayout {
 private extension FlickrPhotosViewController {
   func photo(for indexPath: IndexPath) -> FlickrPhoto {
     return searches[indexPath.section].searchResults[indexPath.row]
+  }
+  
+  func performLargeImageFetch(for indexPath: IndexPath, flickrPhoto: FlickrPhoto) {
+    guard let cell = collectionView.cellForItem(at: indexPath) as? FlickrPhotoCell else {
+      return
+    }
+    
+    cell.activityIndicator.startAnimating()
+    
+    flickrPhoto.loadLargeImage { [weak self] result in
+      guard let self = self else {
+        return
+      }
+      
+      switch result {
+      case .results(let photo):
+        if indexPath == self.largePhotoIndexPath {
+          cell.imageView.image = photo.largeImage
+        }
+      case .error(_):
+        return
+      }
+    }
   }
 }
 
