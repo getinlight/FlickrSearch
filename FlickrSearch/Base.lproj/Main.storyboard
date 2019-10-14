@@ -105,11 +105,16 @@
                                 <outlet property="delegate" destination="XXz-5u-NOV" id="PhA-st-Dwr"/>
                             </connections>
                         </textField>
+                        <barButtonItem key="rightBarButtonItem" systemItem="action" id="HHb-GK-2Uq">
+                            <connections>
+                                <action selector="share:" destination="XXz-5u-NOV" id="7rL-uk-Vr2"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="L1w-xT-ukt" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-580" y="143"/>
+            <point key="canvasLocation" x="-697" y="154"/>
         </scene>
     </scenes>
 </document>
